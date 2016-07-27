@@ -31,12 +31,13 @@ height: 2.5em!important;
     padding-left: 0px;
 }
 li{
+    list-style: none;
     display: list-item;
 }
 .elementList{
     margin: 0;
     padding: 0;
-    list-style: none;
+
     height: 2.5em;
     border-bottom: 1px solid #ededed;
 position: relative;
@@ -51,6 +52,9 @@ position: relative;
 .elementList:focus, .elementList:hover .close{
     color: red;
 }
+.elementList span{
+    cursor: default;
+}
 
 .done {
     margin-right: 1em;
@@ -64,11 +68,46 @@ position: relative;
     border-radius: 50px;
 }
 
-.active .done{
+.completed .done{
     background-color: chartreuse;
 }
-.active .textItem{
+.completed .textItem{
     cursor: none;
     color: #9c9c9c;
     text-decoration: line-through;
+}
+
+#down_li{
+    height: 2.5em;
+
+}
+#down_li div{
+    height: 100%;
+    margin-top: 0.5em;
+}
+#down_li div #item_left {
+    margin-right: 3em!important;
+    cursor: default;
+
+}
+#ClearCompleted {
+margin-left: 3em!important;
+    transform: none;
+    cursor: pointer;
+}
+.filter{
+    margin: 3px;
+    padding: 3px 6px;
+    text-decoration: none;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.filter:hover{
+    background-color: #fff!important;
+    border: 1px solid #cccccc!important;
+}
+.activeThis{
+    background-color: #fff!important;
+    border: 1px solid #cccccc;
 }
