@@ -43,7 +43,7 @@ $(document).ready(function () {
                         $(".inputForm").append(formatted);
 
                     }
-
+                    $("#ClearCompleted").hide();
 
                     itemObject.textInput.all.push($("input").val());                //додаю введення з поля
 
@@ -153,6 +153,7 @@ $(document).ready(function () {
 
                         }
                         else {
+
                             itemObject.count--;
                             countItem(itemObject.count);
                             $(".elementList:eq( " + itemObject.index + " )").addClass("completed");
@@ -161,6 +162,14 @@ $(document).ready(function () {
                             itemObject.textInput.active[itemObject.index] = '';
 
                         }
+//показує або ховає #ClearCompleted
+                        if (itemObject.count !== itemObject.textInput.all.length){
+                            $("#ClearCompleted").show();
+                        }
+                        else {
+                            $("#ClearCompleted").hide();
+                        }
+
 
                     });
 
