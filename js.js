@@ -181,8 +181,9 @@ $(document).ready(function () {
                         }
                         else if (id === 'active') {
 
+
+                            $('.elementList').show();
                             $('.completed').hide();
-                            $('.active').show();
 
                         }
                         else if (id === 'completed') {
