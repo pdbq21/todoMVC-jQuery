@@ -54,6 +54,7 @@ position: relative;
 }
 .elementList span{
     cursor: default;
+    word-break: break-all;
 }
 
 .done {
@@ -94,6 +95,10 @@ position: relative;
 margin-left: 3em!important;
     transform: none;
     cursor: pointer;
+}
+
+#ClearCompleted:hover{
+    text-decoration: underline;
 }
 .filter{
     margin: 3px;

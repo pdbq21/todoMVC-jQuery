@@ -11,7 +11,8 @@ $(document).ready(function () {
                     all: [],
                     active: [],
                     completed: []
-                }
+                },
+                count: 0
 
             };
 
@@ -19,9 +20,9 @@ $(document).ready(function () {
 
 
                 HTMLTag_down_ul = "<li id='down_li'><div class='col-md-12'>" +
-                    "<span id='item_left'># item left</span><span class='filter activeThis' id='All'>All</span>" +
-                    "<span class='filter' id='Active' >Active</span>" +
-                    "<span class='filter' id='Completed' >Completed</span>" +
+                    "<span id='item_left'></span><span class='filter activeThis' id='all'>All</span>" +
+                    "<span class='filter' id='active' >Active</span>" +
+                    "<span class='filter' id='completed' >Completed</span>" +
                     "<span id='ClearCompleted'>ClearCompleted</span>" +
                     "</div></li>",
                 HTMLTag_li = "<li class='elementList'><div class='col-md-12 '>" +
@@ -32,107 +33,192 @@ $(document).ready(function () {
                     "</div></li>";
 
             this.submit(function (event) {
+                if ($("input").val() !== '') {
+                    $("#itemList").remove();                //видаляю весь список щоб перезаписати
+                    itemObject.count = 0;
+                    var formatted;
 
-                $("li.elementList").remove();                //видаляю весь список щоб перезаписати
+                    if (!($("ul").is("#itemList"))) {
+                        formatted = HTMLTagUl.replace("%date%", HTMLTag_down_ul);
+                        $(".inputForm").append(formatted);
 
-                var formatted;
-
-                if (!($("ul").is("#itemList"))) {
-                    formatted = HTMLTagUl.replace("%date%", HTMLTag_down_ul);
-                    $(".inputForm").append(formatted);
-
-                }
-
-
-                itemObject.textInput.all.push($("input").val());                //додаю введення з поля
-
-                //формування списку
-                for (var key in itemObject.textInput.all) {
-                    formatted = HTMLTag_li.replace("%date%", itemObject.textInput.all[key]);
-                    $("#down_li").before(formatted);
-
-                    $("input").val("");
-
-                    if (itemObject.textInput.completed[key] !== 'done') {
-                        itemObject.textInput.completed[key] = '';
-                        //додає в масив відповідне значення
-                        itemObject.textInput.active[key] = itemObject.textInput.all[key];
-                    }
-                    else {
-                        itemObject.textInput.active[key] = '';
                     }
 
 
-                }
+                    itemObject.textInput.all.push($("input").val());                //додаю введення з поля
 
-                // completed
-                for (var key in itemObject.textInput.completed) {
-                    if (itemObject.textInput.completed[key] === 'done') {
+                    function listItem(element) {
 
-                        $(".elementList:eq( " + key + " )").addClass("completed");
+                        //формування списку
+                        for (var key in element) {
+
+                            formatted = HTMLTag_li.replace("%date%", element[key]);
+                            $("#down_li").before(formatted);
+
+                            $("input").val("");
+
+                            if (itemObject.textInput.completed[key] !== 'done') {
+                                itemObject.textInput.completed[key] = '';
+                                itemObject.count++;
+                                //додає в масив відповідне значення
+                                itemObject.textInput.active[key] = element[key];
+                            }
+                            else {
+                                itemObject.textInput.active[key] = '';
+                            }
+
+
+                        }
+
+                    }
+
+                    listItem(itemObject.textInput.all);
+
+                    function countItem(count) {
+                        if (count === 1) {
+                            $("#item_left").text(count + ' item left');//# item left
+                        } else {
+                            $("#item_left").text(count + ' items left');//# item left
+                        }
+                    }
+
+                    countItem(itemObject.count);
+
+                    //формування списку
+                    /*for (var key in itemObject.textInput.all) {
+                     formatted = HTMLTag_li.replace("%date%", itemObject.textInput.all[key]);
+                     $("#down_li").before(formatted);
+
+                     $("input").val("");
+
+                     if (itemObject.textInput.completed[key] !== 'done') {
+                     itemObject.textInput.completed[key] = '';
+                     //додає в масив відповідне значення
+                     itemObject.textInput.active[key] = itemObject.textInput.all[key];
+                     }
+                     else {
+                     itemObject.textInput.active[key] = '';
+                     }
+
+
+                     }*/
+
+                    // completed
+                    for (var key in itemObject.textInput.completed) {
+                        if (itemObject.textInput.completed[key] === 'done') {
+
+                            $(".elementList:eq( " + key + " )").addClass("completed");
+                        }
+
+
                     }
 
 
-                }
-
-
-                /**************************** delete  *****************************************/
-                $(".close").click(function () {
-                    itemObject.index_close = $(this).parent().parent().index();
-
-
-                    //удаляю елемент в масиві з індексом тега
-                    itemObject.textInput.all.splice(itemObject.index_close, 1);
-                    itemObject.textInput.completed.splice(itemObject.index_close, 1);
-                    itemObject.textInput.active.splice(itemObject.index_close, 1);
+                    /**************************** delete  *****************************************/
+                    $(".close").click(function () {
+                        itemObject.index_close = $(this).parent().parent().index();
+                        itemObject.count--;
+                        countItem(itemObject.count);
+                        //удаляю елемент в масиві з індексом тега
+                        itemObject.textInput.all.splice(itemObject.index_close, 1);
+                        itemObject.textInput.completed.splice(itemObject.index_close, 1);
+                        itemObject.textInput.active.splice(itemObject.index_close, 1);
 
 //delete this tag
-                    $(this).parents('li').remove();
+                        $(this).parents('li').remove();
 
-                });
-
-
-                /******************** Action ******************/
+                    });
 
 
-                $('.done').click(function () {
+                    /******************** Action ******************/
 
 
-                    itemObject.index = $(this).parent().parent().index();
+                    $('.done').click(function () {
 
-                    // добавити спосіб занесення в масив textInput.completed
+                        itemObject.index = $(this).parent().parent().index();
 
-
-                    console.log(itemObject.index);
-                    if ($(this).parent().parent().attr('class') === 'elementList completed') {
-
-                        $(".elementList:eq( " + itemObject.index + " )").removeClass("completed");
-
-                        // видалити з масиву
-                        itemObject.textInput.completed[itemObject.index] = '';
-
-                        itemObject.textInput.active[itemObject.index] = itemObject.textInput.all[itemObject.index];
-
-                    }
-                    else {
-                        $(".elementList:eq( " + itemObject.index + " )").addClass("completed");
-                        // додати в масив
-                        itemObject.textInput.completed[itemObject.index] = 'done';
-                        itemObject.textInput.active[itemObject.index] = '';
-                        console.log(itemObject.textInput.active);
-                    }
-
-                });
-
-                console.log(itemObject.textInput.active);
-
-                /***************************/
-
-                $("#Active").click(function () {
-                    $(this).addClass("activeThis");
+                        // добавити спосіб занесення в масив textInput.completed
 
 
-                });
+                        console.log(itemObject.index);
+                        if ($(this).parent().parent().attr('class') === 'elementList completed') {
+                            itemObject.count++;
+                            countItem(itemObject.count);
+                            $(".elementList:eq( " + itemObject.index + " )").removeClass("completed");
+
+                            // видалити з масиву
+                            itemObject.textInput.completed[itemObject.index] = '';
+
+                            itemObject.textInput.active[itemObject.index] = itemObject.textInput.all[itemObject.index];
+
+                        }
+                        else {
+                            itemObject.count--;
+                            countItem(itemObject.count);
+                            $(".elementList:eq( " + itemObject.index + " )").addClass("completed");
+                            // додати в масив
+                            itemObject.textInput.completed[itemObject.index] = 'done';
+                            itemObject.textInput.active[itemObject.index] = '';
+
+                        }
+
+                    });
+
+
+                    /***************************/
+
+                    $(".filter").click(function () {
+
+                        $(this).parent().children().removeClass('activeThis');
+                        $(this).addClass("activeThis");
+                        var id = $(this).attr('id');
+
+
+                        if (id === 'all') {
+
+                            $('.elementList').show();
+
+                        }
+                        else if (id === 'active') {
+
+                            $('.completed').hide();
+                            $('.active').show();
+
+                        }
+                        else if (id === 'completed') {
+                            console.log(id);
+                            $('.elementList').hide();
+                            $('.completed').show();
+
+
+                        }
+
+
+                        /*******************************/
+
+
+                    });
+
+
+                    $('#ClearCompleted').click(function () {
+
+                        for (var i = 0, lengthCompleted = itemObject.textInput.completed.length; i < lengthCompleted; i++) {
+                            console.log(itemObject.textInput.completed[i]);
+                            if (itemObject.textInput.completed[i] === 'done') {
+                                itemObject.textInput.completed.splice(i, 1);
+                                itemObject.textInput.all.splice(i, 1);
+                                itemObject.textInput.active.splice(i, 1);
+                                i--;
+                                lengthCompleted--;
+
+                            }
+
+                        }
+                        $('.completed').remove();
+                    });
+
+
+                }
 
 
                 return event.preventDefault();//re-play block
