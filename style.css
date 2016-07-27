@@ -1,0 +1,74 @@
+body{
+    background-color: #F5F5F5;
+}
+
+h1{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 100px;
+width: 100%;
+    text-align: center;
+
+    color: #EAD7D7;
+}
+.inputForm{
+    width: 35em;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    background: #fff;
+
+}
+input{
+    font-size: 24px!important;
+height: 2.5em!important;
+    padding: 16px 16px 16px 60px!important;
+
+    border: none!important;
+    outline: none;
+    box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03)!important;
+}
+
+
+#itemList{
+    padding-left: 0px;
+}
+li{
+    display: list-item;
+}
+.elementList{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    height: 2.5em;
+    border-bottom: 1px solid #ededed;
+position: relative;
+    font-size: 24px;
+}
+.elementList div{
+    display: block;
+}
+.close{
+    color: transparent;
+}
+.elementList:focus, .elementList:hover .close{
+    color: red;
+}
+
+.done {
+    margin-right: 1em;
+    border: 1px solid #9c9c9c;
+    padding-right: 1.1em;
+    width: 100px;
+    height: 100px;
+    background: transparent;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+}
+
+.active .done{
+    background-color: chartreuse;
+}
+.active .textItem{
+    cursor: none;
+    color: #9c9c9c;
+    text-decoration: line-through;
+}
