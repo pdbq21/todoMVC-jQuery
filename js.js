@@ -70,7 +70,7 @@ $(document).ready(function () {
 
                     if (!($("ul").is("#itemList"))) {
                         formatted = HTMLTagUl.replace("%date%", HTMLTag_down_ul);
-                        $(".inputForm").append(formatted);
+                        $("#inputForm").append(formatted);
 
                     }
                     $("#ClearCompleted").hide();
@@ -174,7 +174,6 @@ $(document).ready(function () {
                         itemObject.textInput.all.splice(itemObject.index_close, 1);
                         itemObject.textInput.completed.splice(itemObject.index_close, 1);
                         itemObject.textInput.active.splice(itemObject.index_close, 1);
-                        console.log(itemObject.textInput.all.length + ' ' + itemObject.count);
                         showOrHide();
 //delete this tag
                         $(this).parents('li').remove();
@@ -230,7 +229,43 @@ $(document).ready(function () {
 
                     /***************************/
 
+                    /****************************************/
 
+
+                    function doneAllShow() {
+
+
+
+if ($('#completed').attr('class') === 'filter activeThis'){
+
+    if (itemObject.count === itemObject.textInput.all.length){
+        $('#doneAll').hide();
+    }
+    else{
+        $('#doneAll').show();
+    }
+
+
+}
+else if ($('#active').attr('class') === 'filter activeThis'){
+    if (itemObject.count === 0){
+        $('#doneAll').hide();
+    }
+    else{
+        $('#doneAll').show();
+    }
+
+}
+else {
+    $('#doneAll').show();
+}
+
+
+
+                    }
+
+
+                    /************************************/
 
 
 
@@ -242,23 +277,19 @@ $(document).ready(function () {
                         activeThis(id);
 
 
+                        doneAllShow();
+
 
                         /*******************************/
 
 
                     });
-/****************************************/
 
-
-
-
-
-/************************************/
 
                     $('#ClearCompleted').click(function () {
 
                         for (var i = 0, lengthCompleted = itemObject.textInput.completed.length; i < lengthCompleted; i++) {
-                            console.log(itemObject.textInput.completed[i]);
+
                             if (itemObject.textInput.completed[i] === 'done') {
                                 itemObject.textInput.completed.splice(i, 1);
                                 itemObject.textInput.all.splice(i, 1);
@@ -274,6 +305,8 @@ $(document).ready(function () {
                     });
                     /************done all********/
                     showOrHide();
+
+
                     $('#doneAll').click(function () {
 
                         function reset() {
@@ -306,12 +339,15 @@ $(document).ready(function () {
                             for (var i = 0, lengthAll = itemObject.textInput.all.length; i < lengthAll; i++) {
                                 itemObject.textInput.completed[i] = '';
                             }
+
                         }
 
 
-
+                        doneAllShow();
                         showOrHide();
                         $("#item_left").text(itemObject.count + ' item left');//# item left
+
+
 
                     });
 
@@ -332,7 +368,7 @@ $(document).ready(function () {
 
     }(jQuery));
 
-    $(".inputForm").myPlugin();
+    $("#inputForm").myPlugin();
 
 
 });// end.
