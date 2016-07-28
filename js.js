@@ -4,6 +4,9 @@
 
 $(document).ready(function () {
 
+// Переменная restoredSession содержит объект, который был сохранён
+// в localStorage
+    console.log(restoredSession);
     (function ($) {
         $.fn.myPlugin = function () {
             var itemObject = {
@@ -16,6 +19,10 @@ $(document).ready(function () {
                 activeThis : 1
 
             };
+
+
+// Пример того, как можно преобразовать строку, полученную с помощью метода
+// JSON.stringify() и сохранённую в localStorage обратно в объект
 
             var HTMLTagUl = "<ul id='itemList'>%date%</ul>",
 HTMLdoneAll = "<em id='doneAll' class='glyphicon glyphicon-ok'></em>",
@@ -36,6 +43,7 @@ HTMLdoneAll = "<em id='doneAll' class='glyphicon glyphicon-ok'></em>",
 
 
             this.submit(function (event) {
+
 
                 function activeThis(id) {
                     if (id === 'all' || id === 1) {
@@ -60,6 +68,7 @@ HTMLdoneAll = "<em id='doneAll' class='glyphicon glyphicon-ok'></em>",
 
 
                 if ($("input").val() !== '') {
+
 
                     $("#itemList").remove();                //видаляю весь список щоб перезаписати
                     $("#doneAll").remove();
@@ -145,7 +154,6 @@ HTMLdoneAll = "<em id='doneAll' class='glyphicon glyphicon-ok'></em>",
                         }
 
 
-                        return;
                     }
 
 
@@ -359,6 +367,8 @@ else {
 
 
                     /************end done all*****************/
+
+
 
                 }//end if($("input").val() !== '')
 
