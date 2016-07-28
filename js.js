@@ -17,8 +17,8 @@ $(document).ready(function () {
 
             };
 
-            var HTMLTagUl = "<em id='doneAll' class='glyphicon glyphicon-ok'></em><ul id='itemList'>%date%</ul>",
-
+            var HTMLTagUl = "<ul id='itemList'>%date%</ul>",
+HTMLdoneAll = "<em id='doneAll' class='glyphicon glyphicon-ok'></em>",
 
                 HTMLTag_down_ul = "<li id='down_li'><div class='col-md-12'>" +
                     "<span id='item_left'></span><span class='filter activeThis' id='all'>All</span>" +
@@ -32,8 +32,7 @@ $(document).ready(function () {
                     "</span><span class='close glyphicon glyphicon-remove'>" +
                     "</span>" +
                     "</div></li>";
-            var done = function (element) {
-            };
+            var done = function (element) {};
 
 
             this.submit(function (event) {
@@ -69,7 +68,8 @@ $(document).ready(function () {
                     var formatted;
 
                     if (!($("ul").is("#itemList"))) {
-                        formatted = HTMLTagUl.replace("%date%", HTMLTag_down_ul);
+                        $('#inputForm input').before(HTMLdoneAll);
+                        formatted = HTMLTagUl.replace('%date%', HTMLTag_down_ul);
                         $("#inputForm").append(formatted);
 
                     }
@@ -301,6 +301,12 @@ else {
 
                         }
                         $('.completed').remove();
+                        if (itemObject.textInput.all.length === 0){
+
+                            $("#itemList").remove();                //видаляю весь список щоб перезаписати
+                            $("#doneAll").remove();
+                            $('#inputForm input').focus();
+                        }
                         showOrHide();
                     });
                     /************done all********/
