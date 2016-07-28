@@ -4,9 +4,6 @@
 
 $(document).ready(function () {
 
-// Переменная restoredSession содержит объект, который был сохранён
-// в localStorage
-    console.log(restoredSession);
     (function ($) {
         $.fn.myPlugin = function () {
             var itemObject = {
@@ -21,8 +18,6 @@ $(document).ready(function () {
             };
 
 
-// Пример того, как можно преобразовать строку, полученную с помощью метода
-// JSON.stringify() и сохранённую в localStorage обратно в объект
 
             var HTMLTagUl = "<ul id='itemList'>%date%</ul>",
 HTMLdoneAll = "<em id='doneAll' class='glyphicon glyphicon-ok'></em>",
