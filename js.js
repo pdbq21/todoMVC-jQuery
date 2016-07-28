@@ -16,7 +16,7 @@ $(document).ready(function () {
 
             };
 
-            var HTMLTagUl = "<ul id='itemList'>%date%</ul>",
+            var HTMLTagUl = "<em id='doneAll' class='glyphicon glyphicon-ok'></em><ul id='itemList'>%date%</ul>",
 
 
                 HTMLTag_down_ul = "<li id='down_li'><div class='col-md-12'>" +
@@ -28,13 +28,17 @@ $(document).ready(function () {
                 HTMLTag_li = "<li class='elementList'><div class='col-md-12 '>" +
                     "<span class='done'>" +
                     "</span><span class='textItem'>%date%" +
-                    "</span><span class='close'>" +
-                    "<em class='glyphicon glyphicon-remove'></em></span>" +
+                    "</span><span class='close glyphicon glyphicon-remove'>" +
+                    "</span>" +
                     "</div></li>";
+            var done = function (element) {
+            };
 
             this.submit(function (event) {
                 if ($("input").val() !== '') {
                     $("#itemList").remove();                //видаляю весь список щоб перезаписати
+                    $("#doneAll").remove();
+
                     itemObject.count = 0;
                     var formatted;
 
@@ -44,6 +48,13 @@ $(document).ready(function () {
 
                     }
                     $("#ClearCompleted").hide();
+
+
+                    /*******reset doneAll*************/
+
+
+                    /******************/
+
 
                     itemObject.textInput.all.push($("input").val());                //додаю введення з поля
 
@@ -84,6 +95,18 @@ $(document).ready(function () {
 
                     countItem(itemObject.count);
 
+                    function showOrHide() {
+
+
+                        if (itemObject.count !== itemObject.textInput.all.length) {
+                            $("#ClearCompleted").show();
+                        }
+                        else {
+                            $("#ClearCompleted").hide();
+                        }
+                        return;
+                    }
+
                     //формування списку
                     /*for (var key in itemObject.textInput.all) {
                      formatted = HTMLTag_li.replace("%date%", itemObject.textInput.all[key]);
@@ -117,31 +140,31 @@ $(document).ready(function () {
                     /**************************** delete  *****************************************/
                     $(".close").click(function () {
                         itemObject.index_close = $(this).parent().parent().index();
-                        itemObject.count--;
+
+                        if ($(this).parent().parent().attr('class') !== 'elementList completed') {
+                            itemObject.count--;
+                        }
+
                         countItem(itemObject.count);
                         //удаляю елемент в масиві з індексом тега
                         itemObject.textInput.all.splice(itemObject.index_close, 1);
                         itemObject.textInput.completed.splice(itemObject.index_close, 1);
                         itemObject.textInput.active.splice(itemObject.index_close, 1);
-
+                        console.log(itemObject.textInput.all.length + ' ' + itemObject.count);
+                        showOrHide();
 //delete this tag
                         $(this).parents('li').remove();
+
 
                     });
 
 
                     /******************** Action ******************/
 
-
-                    $('.done').click(function () {
-
-                        itemObject.index = $(this).parent().parent().index();
-
-                        // добавити спосіб занесення в масив textInput.completed
+                    function done(element) {
 
 
-                        console.log(itemObject.index);
-                        if ($(this).parent().parent().attr('class') === 'elementList completed') {
+                        if ($(element).parent().parent().attr('class') === 'elementList completed') {
                             itemObject.count++;
                             countItem(itemObject.count);
                             $(".elementList:eq( " + itemObject.index + " )").removeClass("completed");
@@ -162,19 +185,50 @@ $(document).ready(function () {
                             itemObject.textInput.active[itemObject.index] = '';
 
                         }
+
+                    }
+
+
+                    $('.done').click(function () {
+
+                        itemObject.index = $(this).parent().parent().index();
+
+                        // добавити спосіб занесення в масив textInput.completed
+                        done(this);
+                        /*
+                         if ($(this).parent().parent().attr('class') === 'elementList completed') {
+                         itemObject.count++;
+                         countItem(itemObject.count);
+                         $(".elementList:eq( " + itemObject.index + " )").removeClass("completed");
+
+                         // видалити з масиву
+                         itemObject.textInput.completed[itemObject.index] = '';
+
+                         itemObject.textInput.active[itemObject.index] = itemObject.textInput.all[itemObject.index];
+
+                         }
+                         else {
+
+                         itemObject.count--;
+                         countItem(itemObject.count);
+                         $(".elementList:eq( " + itemObject.index + " )").addClass("completed");
+                         // додати в масив
+                         itemObject.textInput.completed[itemObject.index] = 'done';
+                         itemObject.textInput.active[itemObject.index] = '';
+
+                         }
+
+                         */
 //показує або ховає #ClearCompleted
-                        if (itemObject.count !== itemObject.textInput.all.length){
-                            $("#ClearCompleted").show();
-                        }
-                        else {
-                            $("#ClearCompleted").hide();
-                        }
+
+                        showOrHide();
 
 
                     });
 
 
                     /***************************/
+
 
                     $(".filter").click(function () {
 
@@ -226,9 +280,69 @@ $(document).ready(function () {
                         }
                         $('.completed').remove();
                     });
+                    /************done all********/
+
+                    $('#doneAll').click(function () {
+
+                        function reset() {
+                            itemObject.textInput.completed.sort();
+                            if (itemObject.textInput.completed.sort()[0] === '') {
+                                $('.elementList').removeClass('completed');
+                            }
+
+                        }
+
+                        reset();
+
+                        if ($('.elementList').attr('class') !== 'elementList completed') {
+                            $('.elementList').removeClass('completed');
+                            $('.elementList').addClass("completed");
+
+                            for (var i = 0, lengthAll = itemObject.textInput.all.length; i < lengthAll; i++) {
+
+                                itemObject.textInput.completed[i] = 'done';
+                                itemObject.textInput.active[i] = '';
+                            }
+                            itemObject.count = 0;
+                            showOrHide();
+
+                        } else {
+
+                            $('.elementList').removeClass('completed');
+                            itemObject.count = itemObject.textInput.all.length;
+                            showOrHide();
+                            for (var i = 0, lengthAll = itemObject.textInput.all.length; i < lengthAll; i++) {
+                                itemObject.textInput.completed[i] = '';
+                            }
+                        }
+
+                        /* if ($('.elementList').attr('class') === 'elementList completed'){
+                         $('.elementList').removeClass('completed');
+                         itemObject.count = itemObject.textInput.all.length;
+                         showOrHide();
+                         }
+                         else {
+                         $('.elementList').removeClass('completed');
+                         $('.elementList').addClass("completed");
+
+                         for (var i = 0, lengthAll = itemObject.textInput.all.length; i<lengthAll;i++){
+
+                         itemObject.textInput.completed[i] = 'done';
+                         itemObject.textInput.active[i] = '';
+                         }
+                         itemObject.count = 0;
+                         showOrHide();
+                         }*/
 
 
-                }
+                        $("#item_left").text(itemObject.count + ' item left');//# item left
+
+                    });
+
+
+                    /************end done all*****************/
+
+                }//end if($("input").val() !== '')
 
 
                 return event.preventDefault();//re-play block

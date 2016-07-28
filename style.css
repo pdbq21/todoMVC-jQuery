@@ -37,14 +37,16 @@ li{
 .elementList{
     margin: 0;
     padding: 0;
+    height: auto;
+    display: flex;
 
-    height: 2.5em;
     border-bottom: 1px solid #ededed;
 position: relative;
     font-size: 24px;
 }
 .elementList div{
     display: block;
+
 }
 .close{
     color: transparent;
@@ -55,14 +57,45 @@ position: relative;
 .elementList span{
     cursor: default;
     word-break: break-all;
+
+}
+.elementList .done{
+
+    display: block;
+    position: absolute;
+    vertical-align: middle;
+    bottom: 0;
+    top: 0;
+    margin: auto 0;
+}
+.elementList .close{
+    bottom: 0;
+    top: 0;
+    margin: auto 0;
+    display: block;
+    position: absolute;
+    vertical-align: middle;
+
+    margin-left: 21em;
+    width: 0.75em;
+    height: 0.75em;
+
 }
 
+
+.elementList .textItem{
+    width: 82%;
+    display: block;
+    margin-left: 2em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+}
 .done {
     margin-right: 1em;
     border: 1px solid #9c9c9c;
-    padding-right: 1.1em;
-    width: 100px;
-    height: 100px;
+
+    width: 1em;
+    height: 1em;
     background: transparent;
     -moz-border-radius: 50px;
     -webkit-border-radius: 50px;
@@ -115,4 +148,14 @@ margin-left: 3em!important;
 .activeThis{
     background-color: #fff!important;
     border: 1px solid #cccccc;
+}
+#doneAll{
+
+position: absolute;
+    font-size: 1.5em;
+    top: 6.5em;
+
+    padding: 1em;
+    color: #999999;
+
 }
