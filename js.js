@@ -12,7 +12,8 @@ $(document).ready(function () {
                     active: [],
                     completed: []
                 },
-                count: 0
+                count: 0,
+                activeThis : 1
 
             };
 
@@ -34,8 +35,33 @@ $(document).ready(function () {
             var done = function (element) {
             };
 
+
             this.submit(function (event) {
+
+                function activeThis(id) {
+                    if (id === 'all' || id === 1) {
+                        $('.elementList').show();
+                        itemObject.activeThis = 1;
+
+                    }
+                    else if (id === 'active' ||id ===  2) {
+
+                        $('.elementList').show();
+                        $('.completed').hide();
+                        itemObject.activeThis = 2;
+                    }
+                    else if (id === 'completed' || id === 3) {
+                        $('.elementList').hide();
+                        $('.completed').show();
+                        itemObject.activeThis = 3;
+                    }
+                }
+
+
+
+
                 if ($("input").val() !== '') {
+
                     $("#itemList").remove();                //видаляю весь список щоб перезаписати
                     $("#doneAll").remove();
 
@@ -50,10 +76,14 @@ $(document).ready(function () {
                     $("#ClearCompleted").hide();
 
 
-                    /*******reset doneAll*************/
+                   function filterWindow() {
+                     $(".filter").parent().children().removeClass('activeThis');
 
+                       $("#down_li span:eq("+itemObject.activeThis+")").addClass("activeThis");
 
-                    /******************/
+                     }
+
+                     filterWindow();
 
 
                     itemObject.textInput.all.push($("input").val());                //додаю введення з поля
@@ -104,27 +134,21 @@ $(document).ready(function () {
                         else {
                             $("#ClearCompleted").hide();
                         }
+
+
+                        if ($('#active').attr('class') === 'filter activeThis'){
+                            activeThis('active');
+                        }else if($('#completed').attr('class') === 'filter activeThis'){
+                            activeThis('completed');
+                        }else if($('#all').attr('class') === 'filter activeThis'){
+                            activeThis('all');
+                        }
+
+
                         return;
                     }
 
-                    //формування списку
-                    /*for (var key in itemObject.textInput.all) {
-                     formatted = HTMLTag_li.replace("%date%", itemObject.textInput.all[key]);
-                     $("#down_li").before(formatted);
 
-                     $("input").val("");
-
-                     if (itemObject.textInput.completed[key] !== 'done') {
-                     itemObject.textInput.completed[key] = '';
-                     //додає в масив відповідне значення
-                     itemObject.textInput.active[key] = itemObject.textInput.all[key];
-                     }
-                     else {
-                     itemObject.textInput.active[key] = '';
-                     }
-
-
-                     }*/
 
                     // completed
                     for (var key in itemObject.textInput.completed) {
@@ -195,30 +219,7 @@ $(document).ready(function () {
 
                         // добавити спосіб занесення в масив textInput.completed
                         done(this);
-                        /*
-                         if ($(this).parent().parent().attr('class') === 'elementList completed') {
-                         itemObject.count++;
-                         countItem(itemObject.count);
-                         $(".elementList:eq( " + itemObject.index + " )").removeClass("completed");
 
-                         // видалити з масиву
-                         itemObject.textInput.completed[itemObject.index] = '';
-
-                         itemObject.textInput.active[itemObject.index] = itemObject.textInput.all[itemObject.index];
-
-                         }
-                         else {
-
-                         itemObject.count--;
-                         countItem(itemObject.count);
-                         $(".elementList:eq( " + itemObject.index + " )").addClass("completed");
-                         // додати в масив
-                         itemObject.textInput.completed[itemObject.index] = 'done';
-                         itemObject.textInput.active[itemObject.index] = '';
-
-                         }
-
-                         */
 //показує або ховає #ClearCompleted
 
                         showOrHide();
@@ -230,39 +231,29 @@ $(document).ready(function () {
                     /***************************/
 
 
+
+
+
                     $(".filter").click(function () {
 
                         $(this).parent().children().removeClass('activeThis');
                         $(this).addClass("activeThis");
                         var id = $(this).attr('id');
+                        activeThis(id);
 
-
-                        if (id === 'all') {
-
-                            $('.elementList').show();
-
-                        }
-                        else if (id === 'active') {
-
-
-                            $('.elementList').show();
-                            $('.completed').hide();
-
-                        }
-                        else if (id === 'completed') {
-
-                            $('.elementList').hide();
-                            $('.completed').show();
-
-
-                        }
 
 
                         /*******************************/
 
 
                     });
+/****************************************/
 
+
+
+
+
+/************************************/
 
                     $('#ClearCompleted').click(function () {
 
@@ -298,7 +289,7 @@ $(document).ready(function () {
                         if ($('.elementList').attr('class') !== 'elementList completed') {
                             $('.elementList').removeClass('completed');
                             $('.elementList').addClass("completed");
-
+                            $('#doneAll').css('color', '#999999');
                             for (var i = 0, lengthAll = itemObject.textInput.all.length; i < lengthAll; i++) {
 
                                 itemObject.textInput.completed[i] = 'done';
@@ -311,29 +302,13 @@ $(document).ready(function () {
 
                             $('.elementList').removeClass('completed');
                             itemObject.count = itemObject.textInput.all.length;
-
+                            $('#doneAll').css('color', '#D6D6D6');
                             for (var i = 0, lengthAll = itemObject.textInput.all.length; i < lengthAll; i++) {
                                 itemObject.textInput.completed[i] = '';
                             }
                         }
 
-                        /* if ($('.elementList').attr('class') === 'elementList completed'){
-                         $('.elementList').removeClass('completed');
-                         itemObject.count = itemObject.textInput.all.length;
-                         showOrHide();
-                         }
-                         else {
-                         $('.elementList').removeClass('completed');
-                         $('.elementList').addClass("completed");
 
-                         for (var i = 0, lengthAll = itemObject.textInput.all.length; i<lengthAll;i++){
-
-                         itemObject.textInput.completed[i] = 'done';
-                         itemObject.textInput.active[i] = '';
-                         }
-                         itemObject.count = 0;
-                         showOrHide();
-                         }*/
 
                         showOrHide();
                         $("#item_left").text(itemObject.count + ' item left');//# item left
@@ -351,29 +326,6 @@ $(document).ready(function () {
             });//end this.submit(function (event)
 
 
-            /*********
-             * All = A + C;
-             *
-             * Active
-             *  item left/items left = A
-             *
-             * Completed
-             *
-             *Clear completed = C
-             * ************/
-            /*
-             *
-             *
-             * */
-
-            /*
-             [0,1,2,3,4,5,6]
-             [ , , , , , , ]
-
-             [ ,done, , ,done, , ]
-
-
-             */
 
 
         };// end $.fn.myPlugin
