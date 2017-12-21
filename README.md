@@ -1,3 +1,3 @@
 # Todo List with jQuery
 ### Demo
-https://pdbq21.github.io/todoMVC/
+https://pdbq21.github.io/todoMVC-jQuery/
